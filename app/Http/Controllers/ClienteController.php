@@ -1,0 +1,192 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Boleto;
+
+class ClienteController extends Controller
+{
+    // PASO 1: Cartelera
+    public function cartelera()
+    {
+        $peliculas = DB::table('vista_cartelera')->get();
+        return view('cliente.cartelera', compact('peliculas'));
+    }
+
+    // PASO 2: Funciones de una pelicula
+    public function funciones($id)
+    {
+        $pelicula = DB::table('peliculas')->where('id', $id)->first();
+
+        if (!$pelicula) {
+            return redirect()->route('cartelera')->with('error', 'Película no encontrada.');
+        }
+
+        $funciones = DB::table('vista_funciones_detalle')
+            ->where('pelicula_id', $id)
+            ->whereBetween('fecha', [
+                now()->toDateString(),
+                now()->addDay()->toDateString()
+            ])
+            ->orderBy('fecha')
+            ->orderBy('hora')
+            ->get();
+
+        return view('cliente.funciones', compact('pelicula', 'funciones'));
+    }
+
+    // PASO 3: Seleccionar cantidad de boletos
+    public function seleccionarCantidad($id)
+    {
+        $funcion = DB::table('vista_funciones_detalle')
+            ->where('funcion_id', $id)
+            ->first();
+
+        if (!$funcion) {
+            return redirect()->route('cartelera')->with('error', 'Función no encontrada.');
+        }
+
+        $disponibles = DB::table('vista_asientos_disponibilidad')
+            ->where('funcion_id', $id)
+            ->where('estado', 'disponible')
+            ->count();
+
+        return view('cliente.cantidad', compact('funcion', 'disponibles'));
+    }
+
+    // PASO 4: Seleccionar asientos
+    public function seleccionarAsientos($id, $cantidad)
+    {
+        $funcion = DB::table('vista_funciones_detalle')
+            ->where('funcion_id', $id)
+            ->first();
+
+        if (!$funcion) {
+            return redirect()->route('cartelera')->with('error', 'Función no encontrada.');
+        }
+
+        $asientos = DB::table('vista_asientos_disponibilidad')
+            ->where('funcion_id', $id)
+            ->orderBy('fila')
+            ->orderBy('numero')
+            ->get();
+
+        $asientosPorFila = $asientos->groupBy('fila');
+
+        return view('cliente.asientos', compact('funcion', 'asientosPorFila', 'cantidad'));
+    }
+
+    // PASO 5: Resumen
+    public function resumen(Request $request)
+    {
+        $request->validate([
+            'funcion_id' => 'required|integer',
+            'asientos'   => 'required|array|min:1',
+        ]);
+
+        $funcion = DB::table('vista_funciones_detalle')
+            ->where('funcion_id', $request->funcion_id)
+            ->first();
+
+        $asientos = DB::table('vista_asientos_disponibilidad')
+            ->whereIn('asiento_id', $request->asientos)
+            ->where('funcion_id', $request->funcion_id)
+            ->get();
+
+        $total = $asientos->count() * $funcion->precio;
+
+        return view('cliente.resumen', compact('funcion', 'asientos', 'total'));
+    }
+
+    // PASO 6: Confirmar compra
+    public function confirmar(Request $request)
+    {
+        $request->validate([
+            'funcion_id' => 'required|integer',
+            'asientos'   => 'required|array|min:1',
+        ]);
+
+        $funcion = DB::table('funciones')
+            ->join('salas', 'funciones.sala_id', '=', 'salas.id')
+            ->where('funciones.id', $request->funcion_id)
+            ->select('funciones.*', 'salas.precio')
+            ->first();
+
+        $boletosGenerados = [];
+        $fechaCompra = now();
+
+        foreach ($request->asientos as $asiento_id) {
+            $yaVendido = Boleto::where('funcion_id', $request->funcion_id)
+                ->where('asiento_id', $asiento_id)
+                ->exists();
+
+            if (!$yaVendido) {
+                $boleto = Boleto::create([
+                    'funcion_id'   => $request->funcion_id,
+                    'asiento_id'   => $asiento_id,
+                    'user_id'      => Auth::id(),
+                    'precio'       => $funcion->precio,
+                    'fecha_compra' => $fechaCompra,
+                ]);
+                $boletosGenerados[] = $boleto->id;
+            }
+        }
+
+        return redirect()->route('boleto.resultado', [
+            'ids' => implode(',', $boletosGenerados)
+        ]);
+    }
+
+    // Resultado
+    public function resultado(Request $request)
+    {
+        $ids = explode(',', $request->ids);
+
+        $boletos = DB::table('vista_boletos_detalle')
+            ->whereIn('boleto_id', $ids)
+            ->get();
+
+        $compra = [
+            'pelicula'      => $boletos->first()->pelicula,
+            'fecha_funcion' => $boletos->first()->fecha_funcion,
+            'hora_funcion'  => $boletos->first()->hora_funcion,
+            'sala'          => $boletos->first()->sala,
+            'tipo_sala'     => $boletos->first()->tipo_sala,
+            'cliente'       => $boletos->first()->cliente,
+            'fecha_compra'  => $boletos->first()->fecha_compra,
+            'asientos'      => $boletos->pluck('asiento')->toArray(),
+            'total'         => $boletos->sum('precio'),
+            'ids'           => $boletos->pluck('boleto_id')->toArray(),
+        ];
+
+        return view('cliente.resultado', compact('compra'));
+    }
+
+    // Mis boletos agrupados por compra
+    public function misBoletos()
+    {
+        $boletos = DB::table('vista_boletos_detalle')
+            ->where('user_id', Auth::id())
+            ->orderBy('fecha_compra', 'desc')
+            ->get();
+
+        $compras = $boletos->groupBy('fecha_compra')->map(function($grupo) {
+            return [
+                'pelicula'      => $grupo->first()->pelicula,
+                'fecha_funcion' => $grupo->first()->fecha_funcion,
+                'hora_funcion'  => $grupo->first()->hora_funcion,
+                'sala'          => $grupo->first()->sala,
+                'tipo_sala'     => $grupo->first()->tipo_sala,
+                'fecha_compra'  => $grupo->first()->fecha_compra,
+                'asientos'      => $grupo->pluck('asiento')->toArray(),
+                'total'         => $grupo->sum('precio'),
+                'ids'           => $grupo->pluck('boleto_id')->toArray(),
+            ];
+        })->values();
+
+        return view('cliente.mis_boletos', compact('compras'));
+    }
+}
