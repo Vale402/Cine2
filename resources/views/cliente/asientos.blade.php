@@ -106,7 +106,7 @@
 {{-- Pantalla --}}
 <p class="text-center text-white small mb-1">PANTALLA</p>
 <div class="pantalla"></div>
-
+{{-- hola --}}
 {{-- Mapa de asientos --}}
 <form action="{{ route('boleto.resumen') }}" method="POST" id="formAsientos">
     @csrf
