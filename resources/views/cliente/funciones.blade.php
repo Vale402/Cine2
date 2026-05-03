@@ -87,9 +87,9 @@
                     <p class="text-cine-muted mb-1" style="font-size:0.85rem;">
                         <i class="bi bi-building"></i> {{ $funcion->sala }}
                     </p>
-                    <p class="text-cine-gold fw-bold mb-3">
+                    <!--<p class="text-cine-gold fw-bold mb-3">
                         ${{ number_format($funcion->precio, 2) }} MXN
-                    </p>
+                    </p>-->
 
                     {{-- CTA --}}
                     <a href="{{ route('funcion.cantidad', $funcion->funcion_id) }}"
