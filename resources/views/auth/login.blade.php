@@ -1,47 +1,83 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>CineApp — Iniciar Sesión</title>
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{{ asset('css/cine.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-page">
+        <div class="auth-card animate-scale-in">
+            {{-- Logo --}}
+            <div class="auth-logo">
+                <h1>🎬 CINEAPP</h1>
+                <p>Inicia sesión para continuar</p>
+            </div>
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
+            {{-- Session Status --}}
+            @if (session('status'))
+                <div class="alert-cine alert-cine-success mb-3" style="font-size:0.85rem;">
+                    {{ session('status') }}
+                </div>
             @endif
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+
+                {{-- Email --}}
+                <div class="mb-3">
+                    <label for="email" class="form-label-cine">
+                        <i class="bi bi-envelope"></i> Correo electrónico
+                    </label>
+                    <input id="email" type="email" name="email" value="{{ old('email') }}"
+                           class="form-control form-control-cine" placeholder="tu@correo.com"
+                           required autofocus autocomplete="username">
+                    @error('email')
+                        <p class="auth-error"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Password --}}
+                <div class="mb-3">
+                    <label for="password" class="form-label-cine">
+                        <i class="bi bi-lock"></i> Contraseña
+                    </label>
+                    <input id="password" type="password" name="password"
+                           class="form-control form-control-cine" placeholder="••••••••"
+                           required autocomplete="current-password">
+                    @error('password')
+                        <p class="auth-error"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Remember me --}}
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <label class="d-flex align-items-center gap-2" style="cursor:pointer;">
+                        <input type="checkbox" name="remember" id="remember_me"
+                               style="accent-color: var(--cine-primary); width:16px; height:16px;">
+                        <span class="text-cine-muted" style="font-size:0.85rem;">Recordarme</span>
+                    </label>
+                </div>
+
+                {{-- Submit --}}
+                <button type="submit" class="btn-cine w-100 py-2 mb-3" style="font-size:1rem;">
+                    <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                </button>
+
+                {{-- Register link --}}
+                <p class="text-center text-cine-muted mb-0" style="font-size:0.85rem;">
+                    ¿No tienes cuenta?
+                    <a href="{{ route('register') }}" class="text-cine-primary fw-semibold">Regístrate aquí</a>
+                </p>
+            </form>
         </div>
-    </form>
-</x-guest-layout>
+    </div>
+</body>
+</html>
