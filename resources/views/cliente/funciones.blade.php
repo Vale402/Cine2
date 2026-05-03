@@ -1,84 +1,99 @@
 @extends('layouts.cine')
 
-@section('titulo', 'Funciones - ' . $pelicula->titulo)
+@section('titulo', 'Funciones — ' . $pelicula->titulo)
 
 @section('contenido')
 
 {{-- Breadcrumb --}}
-<nav aria-label="breadcrumb" class="mb-4">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <a href="{{ route('cartelera') }}" class="text-danger">Cartelera</a>
-        </li>
-        <li class="breadcrumb-item active text-white">{{ $pelicula->titulo }}</li>
-    </ol>
-</nav>
+<ol class="breadcrumb-cine">
+    <li><a href="{{ route('cartelera') }}"><i class="bi bi-film"></i> Cartelera</a></li>
+    <li class="active">{{ $pelicula->titulo }}</li>
+</ol>
 
-{{-- Info de la pelicula --}}
-<div class="card card-pelicula mb-4 p-3">
-    <div class="row align-items-center">
-        <div class="col-auto">
-            <i class="bi bi-camera-reels text-danger" style="font-size: 4rem;"></i>
-        </div>
-        <div class="col">
-            <h3 class="fw-bold text-white mb-1">{{ $pelicula->titulo }}</h3>
-            <span class="badge bg-danger me-1">{{ $pelicula->clasificacion }}</span>
-            <span class="text-white">{{ $pelicula->genero }}</span>
-            <span class="text-white ms-2">
-                <i class="bi bi-clock"></i> {{ $pelicula->duracion }} min
-            </span>
-            <span class="text-white ms-2">
-                <i class="bi bi-translate"></i> {{ $pelicula->idioma }}
-            </span>
+{{-- Step Indicator --}}
+<div class="step-indicator">
+    <div class="step-item completed"><span class="step-circle"><i class="bi bi-check"></i></span><span class="step-label">Cartelera</span></div>
+    <div class="step-line completed"></div>
+    <div class="step-item active"><span class="step-circle">2</span><span class="step-label">Función</span></div>
+    <div class="step-line pending"></div>
+    <div class="step-item pending"><span class="step-circle">3</span><span class="step-label">Cantidad</span></div>
+    <div class="step-line pending"></div>
+    <div class="step-item pending"><span class="step-circle">4</span><span class="step-label">Asientos</span></div>
+    <div class="step-line pending"></div>
+    <div class="step-item pending"><span class="step-circle">5</span><span class="step-label">Pago</span></div>
+</div>
+
+{{-- Movie Info --}}
+<div class="info-panel info-panel-highlight mb-4 animate-fade-in">
+    <div class="d-flex align-items-center gap-3 flex-wrap">
+        <div class="flex-grow-1">
+            <h3 class="fw-bold text-white mb-2" style="font-family:'Outfit',sans-serif;">{{ $pelicula->titulo }}</h3>
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+                <span class="badge-cine badge-cine-rating">{{ $pelicula->clasificacion }}</span>
+                <span class="badge-cine badge-cine-genre">{{ $pelicula->genero }}</span>
+                <span class="text-cine-muted"><i class="bi bi-clock"></i> {{ $pelicula->duracion }} min</span>
+                <span class="text-cine-muted"><i class="bi bi-translate"></i> {{ $pelicula->idioma }}</span>
+            </div>
         </div>
     </div>
 </div>
 
-{{-- Funciones --}}
+{{-- Functions --}}
 @if($funciones->isEmpty())
-    <div class="alert alert-warning text-center">
-        <i class="bi bi-exclamation-circle fs-3"></i>
-        <p class="mt-2">No hay funciones disponibles para hoy ni mañana.</p>
-        <a href="{{ route('cartelera') }}" class="btn btn-cine mt-2">
-            Volver a la Cartelera
+    <div class="card-cine-static text-center py-5 animate-fade-in">
+        <i class="bi bi-calendar-x text-cine-muted" style="font-size: 3rem;"></i>
+        <h5 class="text-white mt-3">Sin funciones disponibles</h5>
+        <p class="text-cine-muted">No hay funciones programadas para hoy ni mañana.</p>
+        <a href="{{ route('cartelera') }}" class="btn-cine mt-2">
+            <i class="bi bi-arrow-left"></i> Volver a Cartelera
         </a>
     </div>
 @else
-    {{-- Agrupar por fecha --}}
-    @php
-        $funcionesPorFecha = $funciones->groupBy('fecha');
-    @endphp
+    @php $funcionesPorFecha = $funciones->groupBy('fecha'); @endphp
 
     @foreach($funcionesPorFecha as $fecha => $funcionesDelDia)
-    <div class="mb-4">
-        <h5 class="text-danger fw-bold mb-3">
-            <i class="bi bi-calendar-event"></i>
-            {{ \Carbon\Carbon::parse($fecha)->isToday() ? 'Hoy' : 'Mañana' }}
-            - {{ \Carbon\Carbon::parse($fecha)->format('d/m/Y') }}
+    <div class="mb-4 animate-fade-in-up">
+        <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+            <i class="bi bi-calendar-event text-cine-primary"></i>
+            <span class="text-white">
+                {{ \Carbon\Carbon::parse($fecha)->isToday() ? 'Hoy' : 'Mañana' }}
+            </span>
+            <span class="text-cine-muted fw-normal" style="font-size:0.9rem;">
+                — {{ \Carbon\Carbon::parse($fecha)->format('d/m/Y') }}
+            </span>
         </h5>
 
         <div class="row g-3">
             @foreach($funcionesDelDia as $funcion)
-            <div class="col-md-4">
-                <div class="card card-pelicula p-3 text-center">
+            <div class="col-md-4 col-sm-6">
+                <div class="card-cine p-3 text-center h-100 d-flex flex-column justify-content-between">
+                    {{-- Sala Badge --}}
                     <div class="mb-2">
-                        <span class="badge fs-6 px-3 py-2
-                            @if($funcion->tipo_sala == 'IMAX') bg-warning text-dark
-                            @elseif($funcion->tipo_sala == '3D') bg-info text-dark
-                            @else bg-secondary
-                            @endif">
-                            {{ $funcion->tipo_sala }}
-                        </span>
+                        @if($funcion->tipo_sala == 'IMAX')
+                            <span class="badge-cine badge-cine-imax px-3 py-1">IMAX</span>
+                        @elseif($funcion->tipo_sala == '3D')
+                            <span class="badge-cine badge-cine-3d px-3 py-1">3D</span>
+                        @else
+                            <span class="badge-cine badge-cine-2d px-3 py-1">2D</span>
+                        @endif
                     </div>
-                    <h4 class="text-white fw-bold">
-                        <i class="bi bi-clock"></i>
+
+                    {{-- Time --}}
+                    <h4 class="text-white fw-bold mb-1" style="font-family:'Outfit',sans-serif;">
                         {{ \Carbon\Carbon::parse($funcion->hora)->format('H:i') }}
                     </h4>
-                    <p class="text-white mb-1">
+
+                    {{-- Sala & Price --}}
+                    <p class="text-cine-muted mb-1" style="font-size:0.85rem;">
                         <i class="bi bi-building"></i> {{ $funcion->sala }}
                     </p>
+                    <p class="text-cine-gold fw-bold mb-3">
+                        ${{ number_format($funcion->precio, 2) }} MXN
+                    </p>
+
+                    {{-- CTA --}}
                     <a href="{{ route('funcion.cantidad', $funcion->funcion_id) }}"
-                       class="btn btn-cine w-100">
+                       class="btn-cine w-100 py-2">
                         <i class="bi bi-ticket-perforated"></i> Seleccionar
                     </a>
                 </div>
