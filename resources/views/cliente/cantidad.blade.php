@@ -38,7 +38,7 @@
             </div>
 
             {{-- Movie + function info --}}
-            <h4 class="text-white fw-bold mb-1" style="font-family:'Outfit',sans-serif;">{{ $funcion->pelicula }}</h4>
+            <h4 class="text-cine-text fw-bold mb-1" style="font-family:'Outfit',sans-serif;">{{ $funcion->pelicula }}</h4>
             <div class="d-flex justify-content-center flex-wrap gap-2 mb-3 text-cine-muted" style="font-size:0.85rem;">
                 <span><i class="bi bi-calendar"></i> {{ \Carbon\Carbon::parse($funcion->fecha)->format('d/m/Y') }}</span>
                 <span><i class="bi bi-clock"></i> {{ \Carbon\Carbon::parse($funcion->hora)->format('H:i') }}</span>
@@ -53,13 +53,13 @@
 
             {{-- Available seats --}}
             <div class="info-panel mb-4" style="padding:0.75rem 1rem;">
-                <p class="mb-1 text-white" style="font-size:0.9rem;">
+                <p class="mb-1 text-cine-text" style="font-size:0.9rem;">
                     <i class="bi bi-grid-3x3-gap text-cine-success"></i>
                     <strong class="text-cine-success">{{ $disponibles }}</strong> asientos disponibles
                 </p>
                 <p class="mb-0 text-cine-gold" style="font-size:0.9rem;">
                     <i class="bi bi-currency-dollar"></i>
-                    ${{ number_format($funcion->precio, 2) }} MXN por boleto
+                    {{ number_format($funcion->precio, 2) }} MXN por boleto
                 </p>
             </div>
 
@@ -78,7 +78,7 @@
 
             {{-- Total Preview --}}
             <div class="info-panel mb-4" style="border-color: var(--cine-primary); padding:0.75rem;">
-                <p class="mb-0 text-white" style="font-size:1.1rem;">
+                <p class="mb-0 text-cine-text" style="font-size:1.1rem;">
                     Total estimado:
                     <strong class="text-cine-success" id="totalMonto" style="font-size:1.25rem;">
                         ${{ number_format($funcion->precio, 2) }} MXN

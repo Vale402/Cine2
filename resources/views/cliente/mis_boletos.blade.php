@@ -18,7 +18,7 @@
 @if($compras->isEmpty())
     <div class="card-cine-static text-center py-5 animate-fade-in">
         <i class="bi bi-ticket-perforated text-cine-muted" style="font-size: 4rem;"></i>
-        <h4 class="text-white mt-3">No tienes boletos aún</h4>
+        <h4 class="text-cine-text mt-3">No tienes boletos aún</h4>
         <p class="text-cine-muted">¡Compra tu primer boleto en la cartelera!</p>
         <a href="{{ route('cartelera') }}" class="btn-cine mt-2">
             <i class="bi bi-film"></i> Ir a Cartelera
@@ -32,7 +32,7 @@
                 {{-- Header --}}
                 <div class="d-flex justify-content-between align-items-center px-3 py-2"
                      style="background: var(--cine-gradient);">
-                    <span class="text-white fw-bold" style="font-size:0.85rem;">🎬 CINEAPP</span>
+                    <span class="text-cine-text fw-bold" style="font-size:0.85rem;">🎬 CINEAPP</span>
                     <span class="badge bg-dark bg-opacity-50" style="font-size:0.75rem;">
                         {{ count($compra['asientos']) }}
                         {{ count($compra['asientos']) == 1 ? 'boleto' : 'boletos' }}
@@ -41,7 +41,7 @@
 
                 {{-- Body --}}
                 <div class="p-3">
-                    <h6 class="text-white fw-bold mb-2" style="font-family:'Outfit',sans-serif;">
+                    <h6 class="text-cine-text fw-bold mb-2" style="font-family:'Outfit',sans-serif;">
                         {{ $compra['pelicula'] }}
                     </h6>
 

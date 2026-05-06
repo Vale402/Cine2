@@ -1,28 +1,28 @@
 /* ============================================
-   🎬 CINEAPP — Design System
+   🌸 CINEAPP — Design System (Pink Pastel Theme)
    ============================================ */
 
 /* --- CSS Variables --- */
 :root {
-    --cine-bg: #0a0a0f;
-    --cine-surface: #141420;
-    --cine-surface-hover: #1c1c2e;
-    --cine-surface-alt: #1a1a2e;
-    --cine-primary: #e50914;
-    --cine-primary-hover: #ff1a25;
-    --cine-primary-glow: rgba(229, 9, 20, 0.3);
-    --cine-secondary: #f5c518;
-    --cine-text: #e8e8e8;
-    --cine-text-muted: #8b8b9e;
-    --cine-success: #00c853;
-    --cine-info: #00b8d4;
-    --cine-border: #2a2a3e;
-    --cine-gradient: linear-gradient(135deg, #e50914 0%, #b20610 100%);
-    --cine-gradient-gold: linear-gradient(135deg, #f5c518 0%, #d4a017 100%);
+    --cine-bg: #FFF5F7;
+    --cine-surface: #FFFFFF;
+    --cine-surface-hover: #FFF0F2;
+    --cine-surface-alt: #FFF8F9;
+    --cine-primary: #FF637E;
+    --cine-primary-hover: #E8405A;
+    --cine-primary-glow: rgba(255, 99, 126, 0.25);
+    --cine-secondary: #FFA1AD;
+    --cine-text: #3D1A24;
+    --cine-text-muted: #B07585;
+    --cine-success: #66BB6A;
+    --cine-info: #BA68C8;
+    --cine-border: #FFCCD3;
+    --cine-gradient: linear-gradient(135deg, #FF637E 0%, #E8405A 100%);
+    --cine-gradient-gold: linear-gradient(135deg, #FFA1AD 0%, #FF637E 100%);
     --cine-radius: 12px;
     --cine-radius-lg: 16px;
-    --cine-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-    --cine-shadow-glow: 0 4px 24px rgba(229, 9, 20, 0.15);
+    --cine-shadow: 0 4px 24px rgba(255, 99, 126, 0.10);
+    --cine-shadow-glow: 0 4px 24px rgba(255, 99, 126, 0.28);
     --cine-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -37,6 +37,7 @@ body {
 
 h1, h2, h3, h4, h5, .font-display {
     font-family: 'Outfit', 'Inter', sans-serif;
+    color: var(--cine-text);
 }
 
 a { color: var(--cine-primary); text-decoration: none; transition: var(--cine-transition); }
@@ -54,7 +55,7 @@ a:hover { color: var(--cine-primary-hover); }
    NAVBAR
    ============================================ */
 .navbar-cine {
-    background: rgba(10, 10, 15, 0.85);
+    background: rgba(255, 255, 255, 0.88);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--cine-border);
@@ -85,8 +86,8 @@ a:hover { color: var(--cine-primary-hover); }
 
 .navbar-cine .nav-link:hover,
 .navbar-cine .nav-link.active {
-    color: #fff !important;
-    background: rgba(229, 9, 20, 0.1);
+    color: var(--cine-primary) !important;
+    background: rgba(255, 99, 126, 0.08);
 }
 
 .navbar-cine .nav-link.active::after {
@@ -102,12 +103,12 @@ a:hover { color: var(--cine-primary-hover); }
 }
 
 .nav-user {
-    color: var(--cine-secondary) !important;
+    color: var(--cine-primary) !important;
     font-weight: 600;
 }
 
 .btn-logout {
-    border: 1px solid rgba(229, 9, 20, 0.4);
+    border: 1.5px solid var(--cine-border);
     color: var(--cine-primary);
     background: transparent;
     padding: 0.35rem 1rem;
@@ -137,6 +138,9 @@ a:hover { color: var(--cine-primary-hover); }
     transition: var(--cine-transition);
     position: relative;
     overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
 }
 
 .btn-cine::before {
@@ -144,7 +148,7 @@ a:hover { color: var(--cine-primary-hover); }
     position: absolute;
     top: 0; left: -100%;
     width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
     transition: left 0.5s;
 }
 
@@ -173,6 +177,9 @@ a:hover { color: var(--cine-primary-hover); }
     padding: 0.6rem 1.5rem;
     font-weight: 600;
     transition: var(--cine-transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
 }
 
 .btn-cine-outline:hover {
@@ -183,7 +190,7 @@ a:hover { color: var(--cine-primary-hover); }
 
 .btn-cine-gold {
     background: var(--cine-gradient-gold);
-    color: #1a1a1a;
+    color: #fff;
     border: none;
     border-radius: 10px;
     padding: 0.6rem 1.5rem;
@@ -193,8 +200,8 @@ a:hover { color: var(--cine-primary-hover); }
 
 .btn-cine-gold:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(245, 197, 24, 0.3);
-    color: #1a1a1a;
+    box-shadow: 0 4px 20px rgba(255, 161, 173, 0.4);
+    color: #fff;
 }
 
 /* ============================================
@@ -209,7 +216,7 @@ a:hover { color: var(--cine-primary-hover); }
 }
 
 .card-cine:hover {
-    border-color: rgba(229, 9, 20, 0.4);
+    border-color: var(--cine-secondary);
     transform: translateY(-4px);
     box-shadow: var(--cine-shadow-glow);
 }
@@ -232,19 +239,19 @@ a:hover { color: var(--cine-primary-hover); }
     overflow: hidden;
 }
 
-.movie-poster-placeholder.genero-accion { background: linear-gradient(135deg, #1a1a2e, #e74c3c33); }
-.movie-poster-placeholder.genero-terror { background: linear-gradient(135deg, #0d0d0d, #6c3483aa); }
-.movie-poster-placeholder.genero-animacion { background: linear-gradient(135deg, #1a1a2e, #f39c1233); }
-.movie-poster-placeholder.genero-romance { background: linear-gradient(135deg, #1a1a2e, #e91e6333); }
-.movie-poster-placeholder.genero-ciencia { background: linear-gradient(135deg, #1a1a2e, #00b8d433); }
-.movie-poster-placeholder.genero-default { background: linear-gradient(135deg, #1a1a2e, #34495e33); }
+.movie-poster-placeholder.genero-accion    { background: linear-gradient(135deg, #FFE4E8, #FFCCD3); }
+.movie-poster-placeholder.genero-terror    { background: linear-gradient(135deg, #F3E5F5, #E1BEE7); }
+.movie-poster-placeholder.genero-animacion { background: linear-gradient(135deg, #FFF9E6, #FFECB3); }
+.movie-poster-placeholder.genero-romance   { background: linear-gradient(135deg, #FFE8EE, #FFA1AD); }
+.movie-poster-placeholder.genero-ciencia   { background: linear-gradient(135deg, #E8EAF6, #C5CAE9); }
+.movie-poster-placeholder.genero-default   { background: linear-gradient(135deg, #FFF5F7, #FFCCD3); }
 
 .movie-card-body { padding: 1.25rem; }
 .movie-card-title {
     font-family: 'Outfit', sans-serif;
     font-weight: 700;
     font-size: 1.1rem;
-    color: #fff;
+    color: var(--cine-text);
     margin-bottom: 0.75rem;
 }
 
@@ -258,12 +265,12 @@ a:hover { color: var(--cine-primary-hover); }
 
 /* --- Badges --- */
 .badge-cine { padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
-.badge-cine-genre { background: rgba(229, 9, 20, 0.15); color: var(--cine-primary); }
+.badge-cine-genre  { background: rgba(255, 99, 126, 0.12); color: var(--cine-primary); }
 .badge-cine-rating { background: var(--cine-primary); color: #fff; }
-.badge-cine-imax { background: var(--cine-gradient-gold); color: #1a1a1a; font-weight: 700; }
-.badge-cine-3d { background: linear-gradient(135deg, #00b8d4, #0097a7); color: #fff; }
-.badge-cine-2d { background: rgba(139, 139, 158, 0.2); color: var(--cine-text-muted); }
-.badge-cine-seat { background: rgba(13, 110, 253, 0.15); color: #5ea1ff; border: 1px solid rgba(13, 110, 253, 0.3); }
+.badge-cine-imax   { background: var(--cine-gradient-gold); color: #fff; font-weight: 700; }
+.badge-cine-3d     { background: linear-gradient(135deg, #BA68C8, #9C27B0); color: #fff; }
+.badge-cine-2d     { background: rgba(176, 117, 133, 0.12); color: var(--cine-text-muted); }
+.badge-cine-seat   { background: rgba(255, 161, 173, 0.2); color: var(--cine-primary); border: 1px solid var(--cine-border); }
 
 /* ============================================
    BREADCRUMB
@@ -282,7 +289,7 @@ a:hover { color: var(--cine-primary-hover); }
 }
 
 .breadcrumb-cine li { display: flex; align-items: center; gap: 0.5rem; }
-.breadcrumb-cine li + li::before { content: '›'; color: var(--cine-text-muted); font-size: 1.1rem; }
+.breadcrumb-cine li + li::before { content: '›'; color: var(--cine-border); font-size: 1.1rem; }
 .breadcrumb-cine li a { color: var(--cine-primary); font-weight: 500; }
 .breadcrumb-cine li a:hover { color: var(--cine-primary-hover); }
 .breadcrumb-cine li.active { color: var(--cine-text-muted); }
@@ -341,8 +348,8 @@ a:hover { color: var(--cine-primary-hover); }
 }
 
 .step-item.completed .step-label { color: var(--cine-success); }
-.step-item.active .step-label { color: #fff; }
-.step-item.pending .step-label { color: var(--cine-text-muted); }
+.step-item.active .step-label    { color: var(--cine-primary); }
+.step-item.pending .step-label   { color: var(--cine-text-muted); }
 
 .step-line {
     width: 30px;
@@ -352,20 +359,18 @@ a:hover { color: var(--cine-primary-hover); }
 }
 
 .step-line.completed { background: var(--cine-success); }
-.step-line.pending { background: var(--cine-border); }
+.step-line.pending   { background: var(--cine-border); }
 
 /* ============================================
    SECTION HEADERS
    ============================================ */
-.section-header {
-    margin-bottom: 2rem;
-}
+.section-header { margin-bottom: 2rem; }
 
 .section-header h2 {
     font-family: 'Outfit', sans-serif;
     font-weight: 700;
     font-size: 1.75rem;
-    color: #fff;
+    color: var(--cine-text);
 }
 
 .section-header h2 i { color: var(--cine-primary); }
@@ -401,12 +406,12 @@ a:hover { color: var(--cine-primary-hover); }
     color: var(--cine-text);
 }
 
-.alert-cine-success { border-color: var(--cine-success); background: rgba(0, 200, 83, 0.08); }
-.alert-cine-error { border-color: var(--cine-primary); background: rgba(229, 9, 20, 0.08); }
-.alert-cine-warning { border-color: var(--cine-secondary); background: rgba(245, 197, 24, 0.08); }
+.alert-cine-success { border-color: var(--cine-success); background: rgba(102, 187, 106, 0.08); }
+.alert-cine-error   { border-color: var(--cine-primary); background: rgba(255, 99, 126, 0.08); }
+.alert-cine-warning { border-color: var(--cine-secondary); background: rgba(255, 161, 173, 0.1); }
 
 .alert-cine .btn-close {
-    filter: invert(1);
+    filter: none;
     opacity: 0.5;
 }
 
@@ -419,7 +424,7 @@ a:hover { color: var(--cine-primary-hover); }
 }
 
 .table-cine thead th {
-    background: rgba(229, 9, 20, 0.1);
+    background: rgba(255, 204, 211, 0.25);
     color: var(--cine-primary);
     border-color: var(--cine-border);
     font-weight: 600;
@@ -433,15 +438,11 @@ a:hover { color: var(--cine-primary-hover); }
     border-color: var(--cine-border);
     padding: 0.75rem 1rem;
     vertical-align: middle;
+    color: var(--cine-text);
 }
 
-.table-cine tbody tr {
-    transition: var(--cine-transition);
-}
-
-.table-cine tbody tr:hover {
-    background: rgba(229, 9, 20, 0.05);
-}
+.table-cine tbody tr { transition: var(--cine-transition); }
+.table-cine tbody tr:hover { background: rgba(255, 204, 211, 0.12); }
 
 /* ============================================
    TICKET / BOLETO
@@ -489,10 +490,10 @@ a:hover { color: var(--cine-primary-hover); }
 }
 
 .ticket-divider::before { left: -26px; }
-.ticket-divider::after { right: -26px; }
+.ticket-divider::after  { right: -26px; }
 
 .ticket-footer {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(255, 204, 211, 0.2);
     border-top: 1px dashed var(--cine-border);
     padding: 1rem;
     text-align: center;
@@ -509,7 +510,7 @@ a:hover { color: var(--cine-primary-hover); }
 }
 
 .ticket-detail-value {
-    color: #fff;
+    color: var(--cine-text);
     font-weight: 600;
     font-size: 1rem;
 }
@@ -533,21 +534,22 @@ a:hover { color: var(--cine-primary-hover); }
 }
 
 /* ============================================
-   FORM CONTROLS (dark theme)
+   FORM CONTROLS
    ============================================ */
 .form-control-cine {
-    background: rgba(20, 20, 32, 0.8);
-    border: 1px solid var(--cine-border);
+    background: #FFFFFF;
+    border: 1.5px solid var(--cine-border);
     color: var(--cine-text);
     border-radius: 10px;
     padding: 0.65rem 1rem;
     transition: var(--cine-transition);
+    width: 100%;
 }
 
 .form-control-cine:focus {
-    background: rgba(20, 20, 32, 1);
+    background: #FFFFFF;
     border-color: var(--cine-primary);
-    color: #fff;
+    color: var(--cine-text);
     box-shadow: 0 0 0 3px var(--cine-primary-glow);
     outline: none;
 }
@@ -581,18 +583,18 @@ a:hover { color: var(--cine-primary-hover); }
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle at 30% 40%, rgba(229, 9, 20, 0.06) 0%, transparent 50%),
-                radial-gradient(circle at 70% 60%, rgba(245, 197, 24, 0.04) 0%, transparent 50%);
+    background: radial-gradient(circle at 30% 40%, rgba(255, 161, 173, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(255, 99, 126, 0.12) 0%, transparent 50%);
     animation: authBgPulse 8s ease-in-out infinite alternate;
 }
 
 @keyframes authBgPulse {
-    0% { transform: translate(0, 0); }
+    0%   { transform: translate(0, 0); }
     100% { transform: translate(-2%, -2%); }
 }
 
 .auth-card {
-    background: rgba(20, 20, 32, 0.7);
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--cine-border);
@@ -637,35 +639,35 @@ a:hover { color: var(--cine-primary-hover); }
    ============================================ */
 @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeIn {
     from { opacity: 0; }
-    to { opacity: 1; }
+    to   { opacity: 1; }
 }
 
 @keyframes scaleIn {
     from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
+    to   { opacity: 1; transform: scale(1); }
 }
 
 @keyframes slideDown {
     from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes checkBounce {
-    0% { transform: scale(0); }
-    50% { transform: scale(1.2); }
+    0%   { transform: scale(0); }
+    50%  { transform: scale(1.2); }
     100% { transform: scale(1); }
 }
 
-.animate-fade-in-up { animation: fadeInUp 0.5s ease-out both; }
-.animate-fade-in { animation: fadeIn 0.4s ease-out both; }
-.animate-scale-in { animation: scaleIn 0.4s ease-out both; }
-.animate-slide-down { animation: slideDown 0.3s ease-out both; }
-.animate-check { animation: checkBounce 0.6s ease-out both; }
+.animate-fade-in-up  { animation: fadeInUp 0.5s ease-out both; }
+.animate-fade-in     { animation: fadeIn 0.4s ease-out both; }
+.animate-scale-in    { animation: scaleIn 0.4s ease-out both; }
+.animate-slide-down  { animation: slideDown 0.3s ease-out both; }
+.animate-check       { animation: checkBounce 0.6s ease-out both; }
 
 .delay-1 { animation-delay: 0.1s; }
 .delay-2 { animation-delay: 0.2s; }
@@ -673,7 +675,7 @@ a:hover { color: var(--cine-primary-hover); }
 .delay-4 { animation-delay: 0.4s; }
 
 /* ============================================
-   STAT CARDS (Admin dashboard prep)
+   STAT CARDS
    ============================================ */
 .stat-card {
     background: var(--cine-surface);
@@ -684,8 +686,9 @@ a:hover { color: var(--cine-primary-hover); }
 }
 
 .stat-card:hover {
-    border-color: rgba(229, 9, 20, 0.3);
+    border-color: var(--cine-secondary);
     transform: translateY(-2px);
+    box-shadow: var(--cine-shadow);
 }
 
 .stat-card .stat-icon {
@@ -701,7 +704,7 @@ a:hover { color: var(--cine-primary-hover); }
     font-family: 'Outfit', sans-serif;
     font-weight: 700;
     font-size: 1.75rem;
-    color: #fff;
+    color: var(--cine-text);
 }
 
 .stat-card .stat-label {
@@ -713,10 +716,12 @@ a:hover { color: var(--cine-primary-hover); }
    UTILITIES
    ============================================ */
 .text-cine-primary { color: var(--cine-primary) !important; }
-.text-cine-muted { color: var(--cine-text-muted) !important; }
+.text-cine-text    { color: var(--cine-text) !important; }
+.text-cine-muted   { color: var(--cine-text-muted) !important; }
 .text-cine-success { color: var(--cine-success) !important; }
-.text-cine-gold { color: var(--cine-secondary) !important; }
-.bg-cine-surface { background: var(--cine-surface) !important; }
+.text-cine-gold    { color: var(--cine-secondary) !important; }
+.text-cine-info    { color: var(--cine-info) !important; }
+.bg-cine-surface   { background: var(--cine-surface) !important; }
 
 .glow-red { box-shadow: 0 0 20px var(--cine-primary-glow); }
 
@@ -728,7 +733,7 @@ a:hover { color: var(--cine-primary-hover); }
     .section-header h2 { font-size: 1.4rem; }
     .auth-card { margin: 1rem; padding: 1.75rem; }
     .step-label { display: none; }
-    .step-line { width: 20px; }
+    .step-line  { width: 20px; }
     .ticket-divider::before,
     .ticket-divider::after { display: none; }
 }

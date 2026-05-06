@@ -15,7 +15,7 @@
 @if($peliculas->isEmpty())
     <div class="card-cine-static text-center py-5 animate-fade-in">
         <i class="bi bi-film text-cine-muted" style="font-size: 4rem;"></i>
-        <h4 class="text-white mt-3">No hay películas disponibles</h4>
+        <h4 class="text-cine-text mt-3">No hay películas disponibles</h4>
         <p class="text-cine-muted">Vuelve pronto para ver la nueva cartelera</p>
     </div>
 @else
@@ -42,10 +42,17 @@
         @endphp
         <div class="col animate-fade-in-up delay-{{ ($index % 4) + 1 }}">
             <div class="card-cine h-100 d-flex flex-column">
-                {{-- Poster placeholder --}}
-                <div class="movie-poster-placeholder {{ $generoClass }}">
-                    <i class="bi {{ $icon }}" style="opacity:0.3;"></i>
-                </div>
+                {{-- Poster --}}
+                @if($pelicula->imagen)
+                    <div class="movie-poster-placeholder {{ $generoClass }}" style="padding:0; overflow:hidden;">
+                        <img src="{{ asset('storage/' . $pelicula->imagen) }}" alt="{{ $pelicula->titulo }}"
+                             style="width:100%; height:100%; object-fit:cover;">
+                    </div>
+                @else
+                    <div class="movie-poster-placeholder {{ $generoClass }}">
+                        <i class="bi {{ $icon }}" style="opacity:0.3;"></i>
+                    </div>
+                @endif
 
                 {{-- Body --}}
                 <div class="movie-card-body flex-grow-1 d-flex flex-column">

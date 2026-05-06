@@ -27,7 +27,7 @@
 <div class="info-panel info-panel-highlight mb-4 animate-fade-in">
     <div class="d-flex align-items-center gap-3 flex-wrap">
         <div class="flex-grow-1">
-            <h3 class="fw-bold text-white mb-2" style="font-family:'Outfit',sans-serif;">{{ $pelicula->titulo }}</h3>
+            <h3 class="fw-bold text-cine-text mb-2" style="font-family:'Outfit',sans-serif;">{{ $pelicula->titulo }}</h3>
             <div class="d-flex flex-wrap gap-2 align-items-center">
                 <span class="badge-cine badge-cine-rating">{{ $pelicula->clasificacion }}</span>
                 <span class="badge-cine badge-cine-genre">{{ $pelicula->genero }}</span>
@@ -42,7 +42,7 @@
 @if($funciones->isEmpty())
     <div class="card-cine-static text-center py-5 animate-fade-in">
         <i class="bi bi-calendar-x text-cine-muted" style="font-size: 3rem;"></i>
-        <h5 class="text-white mt-3">Sin funciones disponibles</h5>
+        <h5 class="text-cine-text mt-3">Sin funciones disponibles</h5>
         <p class="text-cine-muted">No hay funciones programadas para hoy ni mañana.</p>
         <a href="{{ route('cartelera') }}" class="btn-cine mt-2">
             <i class="bi bi-arrow-left"></i> Volver a Cartelera
@@ -55,7 +55,7 @@
     <div class="mb-4 animate-fade-in-up">
         <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
             <i class="bi bi-calendar-event text-cine-primary"></i>
-            <span class="text-white">
+            <span class="text-cine-text">
                 {{ \Carbon\Carbon::parse($fecha)->isToday() ? 'Hoy' : 'Mañana' }}
             </span>
             <span class="text-cine-muted fw-normal" style="font-size:0.9rem;">
@@ -79,7 +79,7 @@
                     </div>
 
                     {{-- Time --}}
-                    <h4 class="text-white fw-bold mb-1" style="font-family:'Outfit',sans-serif;">
+                    <h4 class="text-cine-text fw-bold mb-1" style="font-family:'Outfit',sans-serif;">
                         {{ \Carbon\Carbon::parse($funcion->hora)->format('H:i') }}
                     </h4>
 

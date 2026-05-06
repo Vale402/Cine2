@@ -1,5 +1,5 @@
 /* ============================================
-   🎬 CINEAPP — Seat Selection Styles
+   🌸 CINEAPP — Seat Selection Styles (Pink Pastel)
    ============================================ */
 
 .screen-container { text-align: center; margin-bottom: 2rem; }
@@ -17,9 +17,9 @@
     width: 60%;
     max-width: 400px;
     margin: 0 auto;
-    background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.1) 100%);
+    background: linear-gradient(180deg, #FF637E 0%, rgba(255,99,126,0.1) 100%);
     border-radius: 50% / 100%;
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.15), 0 0 60px rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 30px rgba(255, 99, 126, 0.25), 0 0 60px rgba(255, 99, 126, 0.08);
 }
 
 /* --- Seat Grid --- */
@@ -71,31 +71,31 @@
 }
 
 .seat.available {
-    background: #1e6f3e;
-    color: rgba(255,255,255,0.9);
-    border: 1px solid #28a745;
+    background: #66BB6A;
+    color: #fff;
+    border: 1px solid #43A047;
 }
 
 .seat.available:hover {
-    background: #28a745;
+    background: #43A047;
     transform: scale(1.15);
-    box-shadow: 0 0 10px rgba(40, 167, 69, 0.4);
+    box-shadow: 0 0 10px rgba(102, 187, 106, 0.5);
     z-index: 1;
 }
 
 .seat.occupied {
-    background: #3a1520;
-    color: rgba(255,255,255,0.3);
+    background: #FFCCD3;
+    color: #B07585;
     cursor: not-allowed;
-    border: 1px solid #5a2030;
+    border: 1px solid #FFA1AD;
 }
 
 .seat.selected {
-    background: #0d6efd;
+    background: #FF637E;
     color: #fff;
     transform: scale(1.1);
-    box-shadow: 0 0 12px rgba(13, 110, 253, 0.5);
-    border: 1px solid #4d9fff;
+    box-shadow: 0 0 12px rgba(255, 99, 126, 0.5);
+    border: 1px solid #FF637E;
 }
 
 /* --- Legend --- */
@@ -121,9 +121,9 @@
     border-radius: 5px 5px 2px 2px;
 }
 
-.seat-legend-dot.available { background: #1e6f3e; border: 1px solid #28a745; }
-.seat-legend-dot.occupied { background: #3a1520; border: 1px solid #5a2030; }
-.seat-legend-dot.selected { background: #0d6efd; border: 1px solid #4d9fff; }
+.seat-legend-dot.available { background: #66BB6A; border: 1px solid #43A047; }
+.seat-legend-dot.occupied  { background: #FFCCD3; border: 1px solid #FFA1AD; }
+.seat-legend-dot.selected  { background: #FF637E; border: 1px solid #E8405A; }
 
 /* --- Selection Summary Bar --- */
 .selection-summary {
@@ -134,7 +134,7 @@
     position: sticky;
     bottom: 1rem;
     z-index: 10;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 -4px 20px rgba(255, 99, 126, 0.15);
 }
 
 /* --- Quantity Selector --- */
@@ -172,7 +172,7 @@
     border-radius: 12px;
     background: var(--cine-surface);
     border: 1px solid var(--cine-border);
-    color: #fff;
+    color: var(--cine-text);
     font-family: 'Outfit', sans-serif;
     font-size: 1.75rem;
     font-weight: 700;
