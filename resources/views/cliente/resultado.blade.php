@@ -105,6 +105,17 @@
                 </p>
             </div>
 
+            {{-- QR Code --}}
+            <div class="text-center py-3" style="border-top: 2px dashed var(--cine-border); border-bottom: 2px dashed var(--cine-border); margin: 0 1.5rem 1rem;">
+                <p class="ticket-detail-label mb-2">CÓDIGO QR</p>
+                <div style="display:inline-block; background:#fff; padding:8px; border-radius:10px; border: 1.5px solid var(--cine-border);">
+                    {!! $qrSvg !!}
+                </div>
+                <p class="text-cine-muted mt-2 mb-0" style="font-size:0.75rem;">
+                    <i class="bi bi-qr-code"></i> Escanea este código en taquilla
+                </p>
+            </div>
+
             {{-- Footer --}}
             <div class="ticket-footer">
                 <i class="bi bi-info-circle"></i>
