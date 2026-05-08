@@ -32,7 +32,7 @@
 <div class="info-panel info-panel-highlight mb-4 animate-fade-in">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div>
-            <h5 class="text-white fw-bold mb-1" style="font-family:'Outfit',sans-serif;">{{ $funcion->pelicula }}</h5>
+            <h5 class="text-cine-text fw-bold mb-1" style="font-family:'Outfit',sans-serif;">{{ $funcion->pelicula }}</h5>
             <div class="d-flex flex-wrap gap-2 align-items-center text-cine-muted" style="font-size:0.85rem;">
                 <span><i class="bi bi-calendar"></i> {{ \Carbon\Carbon::parse($funcion->fecha)->format('d/m/Y') }}</span>
                 <span><i class="bi bi-clock"></i> {{ \Carbon\Carbon::parse($funcion->hora)->format('H:i') }}</span>
@@ -47,7 +47,7 @@
             </div>
         </div>
         <div class="text-end">
-            <p class="text-white mb-0" style="font-size:0.9rem;">
+            <p class="text-cine-text mb-0" style="font-size:0.9rem;">
                 Selecciona <strong class="text-cine-primary">{{ $cantidad }}</strong> asiento(s)
             </p>
             <p class="text-cine-success fw-bold mb-0">
@@ -77,7 +77,7 @@
 </div>
 
 {{-- Seat Map --}}
-<form action="{{ route('boleto.resumen') }}" method="POST" id="formAsientos">
+<form action="{{ route('boleto.preparar') }}" method="POST" id="formAsientos">
     @csrf
     <input type="hidden" name="funcion_id" value="{{ $funcion->funcion_id }}">
 
@@ -109,11 +109,11 @@
     <div class="selection-summary animate-fade-in-up">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <p class="text-white mb-1" style="font-size:0.9rem;">
+                <p class="text-cine-text mb-1" style="font-size:0.9rem;">
                     <strong>Asientos:</strong>
                     <span id="asientosSeleccionados" class="text-cine-primary">Ninguno</span>
                 </p>
-                <p class="text-white mb-0">
+                <p class="text-cine-text mb-0">
                     <strong>Total:</strong>
                     <span id="totalMonto" class="text-cine-success fw-bold fs-5">$0.00 MXN</span>
                 </p>

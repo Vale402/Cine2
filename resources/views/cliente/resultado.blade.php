@@ -12,7 +12,7 @@
             <div class="animate-check" style="display:inline-block;">
                 <i class="bi bi-check-circle-fill text-cine-success" style="font-size: 5rem;"></i>
             </div>
-            <h3 class="text-white fw-bold mt-3" style="font-family:'Outfit',sans-serif;">¡Compra Confirmada!</h3>
+            <h3 class="text-cine-text fw-bold mt-3" style="font-family:'Outfit',sans-serif;">¡Compra Confirmada!</h3>
             <p class="text-cine-muted">Presenta este boleto en taquilla para acceder a la sala</p>
         </div>
 
@@ -22,14 +22,14 @@
             {{-- Header --}}
             <div class="ticket-header">
                 <h4>🎬 CINEAPP</h4>
-                <small class="text-white" style="opacity:0.8;">Boleto de Entrada</small>
+                <small class="text-cine-text" style="opacity:0.8;">Boleto de Entrada</small>
             </div>
 
             {{-- Body --}}
             <div class="ticket-body">
 
                 {{-- Movie Title --}}
-                <h4 class="text-white fw-bold text-center mb-3" style="font-family:'Outfit',sans-serif;">
+                <h4 class="text-cine-text fw-bold text-center mb-3" style="font-family:'Outfit',sans-serif;">
                     {{ $compra['pelicula'] }}
                 </h4>
 

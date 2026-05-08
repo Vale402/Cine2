@@ -27,7 +27,7 @@
     <div class="col-md-7 col-lg-6">
         <div class="card-cine-static p-4 animate-fade-in-up">
 
-            <h4 class="text-white fw-bold text-center mb-4" style="font-family:'Outfit',sans-serif;">
+            <h4 class="text-cine-text fw-bold text-center mb-4" style="font-family:'Outfit',sans-serif;">
                 <i class="bi bi-receipt text-cine-primary"></i> Resumen de tu Compra
             </h4>
 
@@ -36,7 +36,7 @@
                 <h6 class="text-cine-primary fw-bold mb-2">
                     <i class="bi bi-film"></i> Información de la Función
                 </h6>
-                <div class="row text-white" style="font-size:0.9rem;">
+                <div class="row text-cine-text" style="font-size:0.9rem;">
                     <div class="col-sm-6">
                         <p class="mb-1"><strong>Película:</strong> {{ $funcion->pelicula }}</p>
                         <p class="mb-1"><strong>Fecha:</strong> {{ \Carbon\Carbon::parse($funcion->fecha)->format('d/m/Y') }}</p>
@@ -84,7 +84,7 @@
 
             {{-- Total --}}
             <div class="info-panel text-center mb-4" style="border-color: var(--cine-primary);">
-                <p class="text-white mb-1 fs-5">Total a pagar</p>
+                <p class="text-cine-text mb-1 fs-5">Total a pagar</p>
                 <p class="text-cine-success fw-bold mb-1" style="font-size:2rem; font-family:'Outfit',sans-serif;">
                     ${{ number_format($total, 2) }} MXN
                 </p>

@@ -79,21 +79,44 @@ class ClienteController extends Controller
         return view('cliente.asientos', compact('funcion', 'asientosPorFila', 'cantidad'));
     }
 
-    // PASO 5: Resumen
-    public function resumen(Request $request)
+    // PASO 5a: Preparar compra (público — guarda selección en sesión)
+    public function prepararCompra(Request $request)
     {
         $request->validate([
             'funcion_id' => 'required|integer',
             'asientos'   => 'required|array|min:1',
         ]);
 
+        // Guardar la selección en sesión para no perderla al redirigir al login
+        $request->session()->put('compra_pendiente', [
+            'funcion_id' => $request->funcion_id,
+            'asientos'   => $request->asientos,
+        ]);
+
+        // Si no está autenticado, redirigir al login (después volverá al resumen)
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('info', 'Inicia sesión para completar tu compra.');
+        }
+
+        return redirect()->route('boleto.resumen');
+    }
+
+    // PASO 5b: Resumen (requiere auth — lee datos de sesión)
+    public function resumen(Request $request)
+    {
+        $compra = $request->session()->get('compra_pendiente');
+
+        if (!$compra) {
+            return redirect()->route('cartelera')->with('error', 'No hay una compra pendiente. Selecciona tus asientos nuevamente.');
+        }
+
         $funcion = DB::table('vista_funciones_detalle')
-            ->where('funcion_id', $request->funcion_id)
+            ->where('funcion_id', $compra['funcion_id'])
             ->first();
 
         $asientos = DB::table('vista_asientos_disponibilidad')
-            ->whereIn('asiento_id', $request->asientos)
-            ->where('funcion_id', $request->funcion_id)
+            ->whereIn('asiento_id', $compra['asientos'])
+            ->where('funcion_id', $compra['funcion_id'])
             ->get();
 
         $total = $asientos->count() * $funcion->precio;

@@ -28,7 +28,7 @@
         </a>
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
                 aria-controls="navMenu" aria-expanded="false" aria-label="Menú">
-            <i class="bi bi-list text-white fs-4"></i>
+            <i class="bi bi-list text-cine-text fs-4"></i>
         </button>
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav ms-auto align-items-center gap-1">
@@ -38,26 +38,42 @@
                         <i class="bi bi-film"></i> Cartelera
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('mis.boletos') ? 'active' : '' }}"
-                       href="{{ route('mis.boletos') }}">
-                        <i class="bi bi-ticket-perforated"></i> Mis Boletos
-                    </a>
-                </li>
-                <li class="nav-item ms-2">
-                    <span class="nav-link nav-user">
-                        <i class="bi bi-person-circle"></i>
-                        {{ Auth::user()->name }}
-                    </span>
-                </li>
-                <li class="nav-item">
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="btn-logout">
-                            <i class="bi bi-box-arrow-right"></i> Salir
-                        </button>
-                    </form>
-                </li>
+
+                @auth
+                    {{-- Links visibles solo para usuarios autenticados --}}
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('mis.boletos') ? 'active' : '' }}"
+                           href="{{ route('mis.boletos') }}">
+                            <i class="bi bi-ticket-perforated"></i> Mis Boletos
+                        </a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <span class="nav-link nav-user">
+                            <i class="bi bi-person-circle"></i>
+                            {{ Auth::user()->name }}
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="btn-logout">
+                                <i class="bi bi-box-arrow-right"></i> Salir
+                            </button>
+                        </form>
+                    </li>
+                @else
+                    {{-- Links visibles para invitados --}}
+                    <li class="nav-item ms-2">
+                        <a href="{{ route('login') }}" class="btn-logout" style="text-decoration:none;">
+                            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('register') }}" class="btn-cine" style="text-decoration:none; padding: 0.4rem 1rem; font-size: 0.85rem;">
+                            <i class="bi bi-person-plus"></i> Registrarse
+                        </a>
+                    </li>
+                @endauth
             </ul>
         </div>
     </nav>
