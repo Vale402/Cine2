@@ -46,6 +46,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/boleto/resumen', [ClienteController::class, 'resumen'])
         ->name('boleto.resumen');
 
+    // Preparar pago (recibe datos de resumen y guarda en sesión)
+    Route::post('/boleto/pago/preparar', [ClienteController::class, 'prepararPago'])
+        ->name('boleto.pago.preparar');
+
+    // Selección de método de pago
+    Route::get('/boleto/pago', [ClienteController::class, 'mostrarPago'])
+        ->name('boleto.pago');
+
     // Confirmar compra
     Route::post('/boleto/confirmar', [ClienteController::class, 'confirmar'])
         ->name('boleto.confirmar');

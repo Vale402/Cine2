@@ -20,7 +20,9 @@
     <div class="step-line completed"></div>
     <div class="step-item completed"><span class="step-circle"><i class="bi bi-check"></i></span><span class="step-label">Asientos</span></div>
     <div class="step-line completed"></div>
-    <div class="step-item active"><span class="step-circle">5</span><span class="step-label">Pago</span></div>
+    <div class="step-item active"><span class="step-circle">5</span><span class="step-label">Resumen</span></div>
+    <div class="step-line"></div>
+    <div class="step-item"><span class="step-circle">6</span><span class="step-label">Pago</span></div>
 </div>
 
 <div class="row justify-content-center">
@@ -94,7 +96,7 @@
             </div>
 
             {{-- Actions --}}
-            <form action="{{ route('boleto.confirmar') }}" method="POST">
+            <form action="{{ route('boleto.pago.preparar') }}" method="POST">
                 @csrf
                 <input type="hidden" name="funcion_id" value="{{ $funcion->funcion_id }}">
                 @foreach($asientos as $asiento)
@@ -106,7 +108,7 @@
                         <i class="bi bi-x-circle"></i> Cancelar
                     </a>
                     <button type="submit" class="btn-cine w-50 py-2 fs-5">
-                        <i class="bi bi-check-circle"></i> Confirmar
+                        <i class="bi bi-credit-card"></i> Elegir Pago
                     </button>
                 </div>
             </form>

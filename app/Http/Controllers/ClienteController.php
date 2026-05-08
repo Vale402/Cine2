@@ -127,6 +127,45 @@ class ClienteController extends Controller
         return view('cliente.resumen', compact('funcion', 'asientos', 'total'));
     }
 
+    // PASO 5b-extra: Guardar selección en sesión y redirigir a selección de pago
+    public function prepararPago(Request $request)
+    {
+        $request->validate([
+            'funcion_id' => 'required|integer',
+            'asientos'   => 'required|array|min:1',
+        ]);
+
+        $request->session()->put('pago_pendiente', [
+            'funcion_id' => $request->funcion_id,
+            'asientos'   => $request->asientos,
+        ]);
+
+        return redirect()->route('boleto.pago');
+    }
+
+    // PASO 5c: Mostrar selección de método de pago
+    public function mostrarPago(Request $request)
+    {
+        $pago = $request->session()->get('pago_pendiente');
+
+        if (!$pago) {
+            return redirect()->route('cartelera')->with('error', 'No hay una compra pendiente.');
+        }
+
+        $funcion = DB::table('vista_funciones_detalle')
+            ->where('funcion_id', $pago['funcion_id'])
+            ->first();
+
+        $asientos = DB::table('vista_asientos_disponibilidad')
+            ->whereIn('asiento_id', $pago['asientos'])
+            ->where('funcion_id', $pago['funcion_id'])
+            ->get();
+
+        $total = $asientos->count() * $funcion->precio;
+
+        return view('cliente.pago', compact('funcion', 'asientos', 'total', 'pago'));
+    }
+
     // PASO 6: Confirmar compra
     public function confirmar(Request $request)
     {
