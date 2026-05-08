@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Boleto;
+use App\Mail\BoletoConfirmacion;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class ClienteController extends Controller
 {
@@ -158,6 +161,37 @@ class ClienteController extends Controller
             }
         }
 
+        if (!empty($boletosGenerados)) {
+            $boletoData = DB::table('vista_boletos_detalle')
+                ->whereIn('boleto_id', $boletosGenerados)
+                ->get();
+
+            if ($boletoData->isNotEmpty()) {
+                $compraEmail = [
+                    'pelicula'      => $boletoData->first()->pelicula,
+                    'fecha_funcion' => $boletoData->first()->fecha_funcion,
+                    'hora_funcion'  => $boletoData->first()->hora_funcion,
+                    'sala'          => $boletoData->first()->sala,
+                    'tipo_sala'     => $boletoData->first()->tipo_sala,
+                    'cliente'       => $boletoData->first()->cliente,
+                    'fecha_compra'  => $boletoData->first()->fecha_compra,
+                    'asientos'      => $boletoData->pluck('asiento')->toArray(),
+                    'total'         => $boletoData->sum('precio'),
+                    'ids'           => $boletoData->pluck('boleto_id')->toArray(),
+                ];
+
+                try {
+                    Mail::to(Auth::user()->email)->send(new BoletoConfirmacion($compraEmail));
+                } catch (\Exception $e) {
+                    \Log::warning('No se pudo enviar el email de confirmación: ' . $e->getMessage());
+                }
+            }
+        }
+
+        if (empty($boletosGenerados)) {
+            return redirect()->route('cartelera')->with('error', 'Los asientos seleccionados ya no están disponibles.');
+        }
+
         return redirect()->route('boleto.resultado', [
             'ids' => implode(',', $boletosGenerados)
         ]);
@@ -166,11 +200,19 @@ class ClienteController extends Controller
     // Resultado
     public function resultado(Request $request)
     {
-        $ids = explode(',', $request->ids);
+        $ids = array_filter(explode(',', $request->ids ?? ''));
+
+        if (empty($ids)) {
+            return redirect()->route('cartelera')->with('error', 'No se encontraron boletos.');
+        }
 
         $boletos = DB::table('vista_boletos_detalle')
             ->whereIn('boleto_id', $ids)
             ->get();
+
+        if ($boletos->isEmpty()) {
+            return redirect()->route('cartelera')->with('error', 'No se encontraron los boletos solicitados.');
+        }
 
         $compra = [
             'pelicula'      => $boletos->first()->pelicula,
@@ -185,7 +227,19 @@ class ClienteController extends Controller
             'ids'           => $boletos->pluck('boleto_id')->toArray(),
         ];
 
-        return view('cliente.resultado', compact('compra'));
+        $qrData = implode("\n", [
+            'CINEAPP - Boleto de Entrada',
+            'IDs: ' . implode(', ', $compra['ids']),
+            'Pelicula: ' . $compra['pelicula'],
+            'Fecha: ' . \Carbon\Carbon::parse($compra['fecha_funcion'])->format('d/m/Y'),
+            'Hora: ' . \Carbon\Carbon::parse($compra['hora_funcion'])->format('H:i'),
+            'Sala: ' . $compra['sala'] . ' (' . $compra['tipo_sala'] . ')',
+            'Asientos: ' . implode(', ', $compra['asientos']),
+        ]);
+
+        $qrSvg = QrCode::size(160)->color(255, 99, 126)->generate($qrData);
+
+        return view('cliente.resultado', compact('compra', 'qrSvg'));
     }
 
     // Mis boletos agrupados por compra
