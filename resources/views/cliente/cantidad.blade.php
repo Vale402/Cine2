@@ -2,85 +2,95 @@
 
 @section('titulo', 'Cantidad de Boletos')
 
+@section('estilos')
+<link href="{{ asset('css/cine-asientos.css') }}" rel="stylesheet">
+@endsection
+
 @section('contenido')
 
-<nav aria-label="breadcrumb" class="mb-4">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <a href="{{ route('cartelera') }}" class="text-danger">Cartelera</a>
-        </li>
-        <li class="breadcrumb-item">
-            <a href="{{ route('pelicula.funciones', $funcion->pelicula_id) }}" class="text-danger">
-                {{ $funcion->pelicula }}
-            </a>
-        </li>
-        <li class="breadcrumb-item active text-white">Cantidad de Boletos</li>
-    </ol>
-</nav>
+{{-- Breadcrumb --}}
+<ol class="breadcrumb-cine">
+    <li><a href="{{ route('cartelera') }}"><i class="bi bi-film"></i> Cartelera</a></li>
+    <li><a href="{{ route('pelicula.funciones', $funcion->pelicula_id) }}">{{ $funcion->pelicula }}</a></li>
+    <li class="active">Cantidad</li>
+</ol>
+
+{{-- Step Indicator --}}
+<div class="step-indicator">
+    <div class="step-item completed"><span class="step-circle"><i class="bi bi-check"></i></span><span class="step-label">Cartelera</span></div>
+    <div class="step-line completed"></div>
+    <div class="step-item completed"><span class="step-circle"><i class="bi bi-check"></i></span><span class="step-label">Función</span></div>
+    <div class="step-line completed"></div>
+    <div class="step-item active"><span class="step-circle">3</span><span class="step-label">Cantidad</span></div>
+    <div class="step-line pending"></div>
+    <div class="step-item pending"><span class="step-circle">4</span><span class="step-label">Asientos</span></div>
+    <div class="step-line pending"></div>
+    <div class="step-item pending"><span class="step-circle">5</span><span class="step-label">Pago</span></div>
+</div>
 
 <div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card card-pelicula p-4 text-center">
+    <div class="col-md-5 col-lg-4">
+        <div class="card-cine-static p-4 text-center animate-fade-in-up">
 
-            <i class="bi bi-ticket-perforated text-danger mb-3" style="font-size: 4rem;"></i>
+            {{-- Icon --}}
+            <div class="mb-3">
+                <i class="bi bi-ticket-perforated text-cine-primary" style="font-size: 3.5rem;"></i>
+            </div>
 
-            <h4 class="text-white fw-bold mb-1">{{ $funcion->pelicula }}</h4>
-            <p class="text-white mb-3">
-                <i class="bi bi-calendar"></i>
-                {{ \Carbon\Carbon::parse($funcion->fecha)->format('d/m/Y') }}
-                &nbsp;|&nbsp;
-                <i class="bi bi-clock"></i>
-                {{ \Carbon\Carbon::parse($funcion->hora)->format('H:i') }}
-                &nbsp;|&nbsp;
-                <span class="badge bg-danger">{{ $funcion->tipo_sala }}</span>
-            </p>
+            {{-- Movie + function info --}}
+            <h4 class="text-cine-text fw-bold mb-1" style="font-family:'Outfit',sans-serif;">{{ $funcion->pelicula }}</h4>
+            <div class="d-flex justify-content-center flex-wrap gap-2 mb-3 text-cine-muted" style="font-size:0.85rem;">
+                <span><i class="bi bi-calendar"></i> {{ \Carbon\Carbon::parse($funcion->fecha)->format('d/m/Y') }}</span>
+                <span><i class="bi bi-clock"></i> {{ \Carbon\Carbon::parse($funcion->hora)->format('H:i') }}</span>
+                @if($funcion->tipo_sala == 'IMAX')
+                    <span class="badge-cine badge-cine-imax">IMAX</span>
+                @elseif($funcion->tipo_sala == '3D')
+                    <span class="badge-cine badge-cine-3d">3D</span>
+                @else
+                    <span class="badge-cine badge-cine-2d">2D</span>
+                @endif
+            </div>
 
-            <div class="alert alert-dark border border-secondary mb-4">
-                <p class="mb-0 text-white">
-                    <i class="bi bi-chair text-success"></i>
-                    <strong class="text-success">{{ $disponibles }}</strong>
-                    asientos disponibles
+            {{-- Available seats --}}
+            <div class="info-panel mb-4" style="padding:0.75rem 1rem;">
+                <p class="mb-1 text-cine-text" style="font-size:0.9rem;">
+                    <i class="bi bi-grid-3x3-gap text-cine-success"></i>
+                    <strong class="text-cine-success">{{ $disponibles }}</strong> asientos disponibles
                 </p>
-                <p class="mb-0 text-warning mt-1">
+                <p class="mb-0 text-cine-gold" style="font-size:0.9rem;">
                     <i class="bi bi-currency-dollar"></i>
-                    Precio por boleto:
-                    <strong>${{ number_format($funcion->precio, 2) }} MXN</strong>
+                    {{ number_format($funcion->precio, 2) }} MXN por boleto
                 </p>
             </div>
 
-            <form id="formCantidad" action="" method="GET">
-                <label class="form-label text-white fw-bold fs-5 mb-3">
-                    ¿Cuántos boletos deseas?
-                </label>
-                <div class="d-flex align-items-center justify-content-center gap-3 mb-4">
-                    <button type="button" class="btn btn-outline-danger btn-lg px-4"
-                        onclick="cambiarCantidad(-1)">
-                        <i class="bi bi-dash-lg"></i>
-                    </button>
-                    <input type="number" id="cantidad" name="cantidad"
-                        value="1" min="1" max="{{ min($disponibles, 10) }}"
-                        class="form-control text-center fw-bold fs-4 text-white bg-dark border-secondary"
-                        style="width: 80px;" readonly>
-                    <button type="button" class="btn btn-outline-danger btn-lg px-4"
-                        onclick="cambiarCantidad(1)">
-                        <i class="bi bi-plus-lg"></i>
-                    </button>
-                </div>
+            {{-- Quantity Selector --}}
+            <label class="form-label-cine fs-5 mb-3 d-block">¿Cuántos boletos?</label>
 
-                <div id="totalPreview" class="alert alert-dark border-danger mb-4">
-                    <p class="mb-0 text-white fs-5">
-                        Total estimado:
-                        <strong class="text-success" id="totalMonto">
-                            ${{ number_format($funcion->precio, 2) }} MXN
-                        </strong>
-                    </p>
-                </div>
-
-                <button type="button" class="btn btn-cine w-100 py-2 fs-5"
-                     onclick="irAAsientos()">
-                        <i class="bi bi-arrow-right-circle"></i> Elegir Asientos
+            <div class="qty-selector mb-4">
+                <button type="button" class="qty-btn" onclick="cambiarCantidad(-1)">
+                    <i class="bi bi-dash-lg"></i>
                 </button>
-            </form>
+                <div class="qty-display" id="cantidadDisplay">1</div>
+                <button type="button" class="qty-btn" onclick="cambiarCantidad(1)">
+                    <i class="bi bi-plus-lg"></i>
+                </button>
+            </div>
+
+            {{-- Total Preview --}}
+            <div class="info-panel mb-4" style="border-color: var(--cine-primary); padding:0.75rem;">
+                <p class="mb-0 text-cine-text" style="font-size:1.1rem;">
+                    Total estimado:
+                    <strong class="text-cine-success" id="totalMonto" style="font-size:1.25rem;">
+                        ${{ number_format($funcion->precio, 2) }} MXN
+                    </strong>
+                </p>
+            </div>
+
+            {{-- CTA --}}
+            <button type="button" class="btn-cine w-100 py-2 fs-5" onclick="irAAsientos()">
+                <i class="bi bi-arrow-right-circle"></i> Elegir Asientos
+            </button>
+
         </div>
     </div>
 </div>
@@ -91,21 +101,20 @@
 <script>
     const precio = {{ $funcion->precio }};
     const max = {{ min($disponibles, 10) }};
+    let cantidad = 1;
 
     function cambiarCantidad(valor) {
-        const input = document.getElementById('cantidad');
-        let actual = parseInt(input.value);
-        actual += valor;
-        if (actual < 1) actual = 1;
-        if (actual > max) actual = max;
-        input.value = actual;
+        cantidad += valor;
+        if (cantidad < 1) cantidad = 1;
+        if (cantidad > max) cantidad = max;
+        document.getElementById('cantidadDisplay').textContent = cantidad;
         document.getElementById('totalMonto').textContent =
-            '$' + (precio * actual).toFixed(2) + ' MXN';
+            '$' + (precio * cantidad).toFixed(2) + ' MXN';
     }
+
     function irAAsientos() {
-    const cantidad = document.getElementById('cantidad').value;
-    const id = {{ $funcion->funcion_id }};
-    window.location.href = `/funcion/${id}/asientos/${cantidad}`;
+        const id = {{ $funcion->funcion_id }};
+        window.location.href = `/funcion/${id}/asientos/${cantidad}`;
     }
 </script>
 @endsection

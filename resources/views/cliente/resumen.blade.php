@@ -4,55 +4,65 @@
 
 @section('contenido')
 
-<nav aria-label="breadcrumb" class="mb-4">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <a href="{{ route('cartelera') }}" class="text-danger">Cartelera</a>
-        </li>
-        <li class="breadcrumb-item active text-white">Resumen de Compra</li>
-    </ol>
-</nav>
+{{-- Breadcrumb --}}
+<ol class="breadcrumb-cine">
+    <li><a href="{{ route('cartelera') }}"><i class="bi bi-film"></i> Cartelera</a></li>
+    <li class="active">Resumen de Compra</li>
+</ol>
+
+{{-- Step Indicator --}}
+<div class="step-indicator">
+    <div class="step-item completed"><span class="step-circle"><i class="bi bi-check"></i></span><span class="step-label">Cartelera</span></div>
+    <div class="step-line completed"></div>
+    <div class="step-item completed"><span class="step-circle"><i class="bi bi-check"></i></span><span class="step-label">Función</span></div>
+    <div class="step-line completed"></div>
+    <div class="step-item completed"><span class="step-circle"><i class="bi bi-check"></i></span><span class="step-label">Cantidad</span></div>
+    <div class="step-line completed"></div>
+    <div class="step-item completed"><span class="step-circle"><i class="bi bi-check"></i></span><span class="step-label">Asientos</span></div>
+    <div class="step-line completed"></div>
+    <div class="step-item active"><span class="step-circle">5</span><span class="step-label">Pago</span></div>
+</div>
 
 <div class="row justify-content-center">
-    <div class="col-md-7">
-        <div class="card card-pelicula p-4">
+    <div class="col-md-7 col-lg-6">
+        <div class="card-cine-static p-4 animate-fade-in-up">
 
-            <h4 class="text-white fw-bold text-center mb-4">
-                <i class="bi bi-receipt text-danger"></i> Resumen de tu Compra
+            <h4 class="text-cine-text fw-bold text-center mb-4" style="font-family:'Outfit',sans-serif;">
+                <i class="bi bi-receipt text-cine-primary"></i> Resumen de tu Compra
             </h4>
 
-            {{-- Info de la funcion --}}
-            <div class="alert alert-dark border border-secondary mb-4">
-                <h6 class="text-danger fw-bold mb-2">
+            {{-- Function Info --}}
+            <div class="info-panel info-panel-highlight mb-4">
+                <h6 class="text-cine-primary fw-bold mb-2">
                     <i class="bi bi-film"></i> Información de la Función
                 </h6>
-                <p class="text-white mb-1">
-                    <strong>Película:</strong> {{ $funcion->pelicula }}
-                </p>
-                <p class="text-white mb-1">
-                    <strong>Fecha:</strong>
-                    {{ \Carbon\Carbon::parse($funcion->fecha)->format('d/m/Y') }}
-                </p>
-                <p class="text-white mb-1">
-                    <strong>Hora:</strong>
-                    {{ \Carbon\Carbon::parse($funcion->hora)->format('H:i') }}
-                </p>
-                <p class="text-white mb-1">
-                    <strong>Sala:</strong> {{ $funcion->sala }}
-                    <span class="badge bg-danger ms-1">{{ $funcion->tipo_sala }}</span>
-                </p>
-                <p class="text-white mb-0">
-                    <strong>Precio por boleto:</strong>
-                    <span class="text-success">${{ number_format($funcion->precio, 2) }} MXN</span>
-                </p>
+                <div class="row text-cine-text" style="font-size:0.9rem;">
+                    <div class="col-sm-6">
+                        <p class="mb-1"><strong>Película:</strong> {{ $funcion->pelicula }}</p>
+                        <p class="mb-1"><strong>Fecha:</strong> {{ \Carbon\Carbon::parse($funcion->fecha)->format('d/m/Y') }}</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="mb-1"><strong>Hora:</strong> {{ \Carbon\Carbon::parse($funcion->hora)->format('H:i') }}</p>
+                        <p class="mb-1">
+                            <strong>Sala:</strong> {{ $funcion->sala }}
+                            @if($funcion->tipo_sala == 'IMAX')
+                                <span class="badge-cine badge-cine-imax ms-1">IMAX</span>
+                            @elseif($funcion->tipo_sala == '3D')
+                                <span class="badge-cine badge-cine-3d ms-1">3D</span>
+                            @else
+                                <span class="badge-cine badge-cine-2d ms-1">2D</span>
+                            @endif
+                        </p>
+                    </div>
+                </div>
             </div>
 
-            {{-- Asientos seleccionados --}}
-            <h6 class="text-danger fw-bold mb-3">
-                <i class="bi bi-chair"></i> Asientos Seleccionados
+            {{-- Seats Table --}}
+            <h6 class="text-cine-primary fw-bold mb-3">
+                <i class="bi bi-grid-3x3-gap"></i> Asientos Seleccionados
             </h6>
             <div class="table-responsive mb-4">
-                <table class="table table-dark table-bordered text-center">
+                <table class="table table-cine text-center mb-0">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -64,14 +74,8 @@
                         @foreach($asientos as $index => $asiento)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>
-                                <span class="badge bg-primary fs-6">
-                                    {{ $asiento->asiento }}
-                                </span>
-                            </td>
-                            <td class="text-success">
-                                ${{ number_format($funcion->precio, 2) }} MXN
-                            </td>
+                            <td><span class="badge-cine badge-cine-seat">{{ $asiento->asiento }}</span></td>
+                            <td class="text-cine-success">${{ number_format($funcion->precio, 2) }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -79,17 +83,17 @@
             </div>
 
             {{-- Total --}}
-            <div class="alert alert-dark border border-danger text-center mb-4">
-                <p class="text-white mb-0 fs-5">
-                    Total a pagar:
-                    <strong class="text-success fs-4">
-                        ${{ number_format($total, 2) }} MXN
-                    </strong>
+            <div class="info-panel text-center mb-4" style="border-color: var(--cine-primary);">
+                <p class="text-cine-text mb-1 fs-5">Total a pagar</p>
+                <p class="text-cine-success fw-bold mb-1" style="font-size:2rem; font-family:'Outfit',sans-serif;">
+                    ${{ number_format($total, 2) }} MXN
                 </p>
-                <small class="text-muted">Pago en efectivo en taquilla</small>
+                <small class="text-cine-muted">
+                    <i class="bi bi-cash-stack"></i> Pago en efectivo en taquilla
+                </small>
             </div>
 
-            {{-- Botones --}}
+            {{-- Actions --}}
             <form action="{{ route('boleto.confirmar') }}" method="POST">
                 @csrf
                 <input type="hidden" name="funcion_id" value="{{ $funcion->funcion_id }}">
@@ -98,12 +102,11 @@
                 @endforeach
 
                 <div class="d-flex gap-3">
-                    <a href="{{ route('cartelera') }}"
-                       class="btn btn-outline-danger w-50 py-2">
+                    <a href="{{ route('cartelera') }}" class="btn-cine-outline w-50 py-2 text-center">
                         <i class="bi bi-x-circle"></i> Cancelar
                     </a>
-                    <button type="submit" class="btn btn-cine w-50 py-2 fs-5">
-                        <i class="bi bi-check-circle"></i> Confirmar Compra
+                    <button type="submit" class="btn-cine w-50 py-2 fs-5">
+                        <i class="bi bi-check-circle"></i> Confirmar
                     </button>
                 </div>
             </form>

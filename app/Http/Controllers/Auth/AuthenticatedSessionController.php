@@ -28,6 +28,16 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // Si hay una compra pendiente, redirigir al resumen
+        if ($request->session()->has('compra_pendiente')) {
+            return redirect()->route('boleto.resumen');
+        }
+
+        // Redirect based on user role
+        if (Auth::user()->rol === 'administrador') {
+            return redirect()->intended(route('admin.dashboard'));
+        }
+
         return redirect()->intended(route('cartelera'));
     }
 

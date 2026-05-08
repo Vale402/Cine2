@@ -3,115 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineApp - @yield('titulo', 'Bienvenido')</title>
+    <meta name="description" content="CineApp — Tu experiencia de cine, digital y sin filas.">
+    <title>CineApp — @yield('titulo', 'Bienvenido')</title>
+
+    {{-- Google Fonts --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    {{-- Bootstrap 5 --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #0f0f0f;
-            color: #ffffff;
-            font-family: 'Segoe UI', sans-serif;
-        }
-        .navbar-cine {
-            background-color: #1a1a1a;
-            border-bottom: 2px solid #e50914;
-        }
-        .navbar-brand {
-            color: #e50914 !important;
-            font-weight: bold;
-            font-size: 1.5rem;
-            letter-spacing: 2px;
-        }
-        .nav-link {
-            color: #ffffff !important;
-        }
-        .nav-link:hover {
-            color: #e50914 !important;
-        }
-        .btn-cine {
-            background-color: #e50914;
-            color: white;
-            border: none;
-        }
-        .btn-cine:hover {
-            background-color: #b20610;
-            color: white;
-        }
-        .card-pelicula {
-            background-color: #1a1a1a;
-            border: 1px solid #ffffff;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-        .card-pelicula:hover {
-            transform: translateY(-5px);
-            border-color: #e50914;
-        }
-        .badge-genero {
-            background-color: #e50914;
-            color: white;
-        }
-        .footer-cine {
-            background-color: #1a1a1a;
-            border-top: 2px solid #e50914;
-            color: #ffffff;
-        }
-        @yield('estilos')
-    </style>
+
+    {{-- CineApp Design System --}}
+    <link href="{{ asset('css/cine.css') }}" rel="stylesheet">
+    @yield('estilos')
 </head>
 <body>
 
     {{-- NAVBAR --}}
-    <nav class="navbar navbar-expand-lg navbar-cine px-4">
+    <nav class="navbar navbar-expand-lg navbar-cine">
         <a class="navbar-brand" href="{{ route('cartelera') }}">
             🎬 CINEAPP
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-            <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+                aria-controls="navMenu" aria-expanded="false" aria-label="Menú">
+            <i class="bi bi-list text-cine-text fs-4"></i>
         </button>
         <div class="collapse navbar-collapse" id="navMenu">
-            <ul class="navbar-nav ms-auto align-items-center">
+            <ul class="navbar-nav ms-auto align-items-center gap-1">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('cartelera') }}">
+                    <a class="nav-link {{ request()->routeIs('cartelera') ? 'active' : '' }}"
+                       href="{{ route('cartelera') }}">
                         <i class="bi bi-film"></i> Cartelera
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('mis.boletos') }}">
-                        <i class="bi bi-ticket-perforated"></i> Mis Boletos
-                    </a>
-                </li>
-                <li class="nav-item ms-3">
-                    <span class="nav-link text-warning">
-                        <i class="bi bi-person-circle"></i>
-                        {{ Auth::user()->name }}
-                    </span>
-                </li>
-                <li class="nav-item">
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="btn btn-outline-danger btn-sm ms-2">
-                            <i class="bi bi-box-arrow-right"></i> Salir
-                        </button>
-                    </form>
-                </li>
+
+                @auth
+                    {{-- Links visibles solo para usuarios autenticados --}}
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('mis.boletos') ? 'active' : '' }}"
+                           href="{{ route('mis.boletos') }}">
+                            <i class="bi bi-ticket-perforated"></i> Mis Boletos
+                        </a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <span class="nav-link nav-user">
+                            <i class="bi bi-person-circle"></i>
+                            {{ Auth::user()->name }}
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="btn-logout">
+                                <i class="bi bi-box-arrow-right"></i> Salir
+                            </button>
+                        </form>
+                    </li>
+                @else
+                    {{-- Links visibles para invitados --}}
+                    <li class="nav-item ms-2">
+                        <a href="{{ route('login') }}" class="btn-logout" style="text-decoration:none;">
+                            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('register') }}" class="btn-cine" style="text-decoration:none; padding: 0.4rem 1rem; font-size: 0.85rem;">
+                            <i class="bi bi-person-plus"></i> Registrarse
+                        </a>
+                    </li>
+                @endauth
             </ul>
         </div>
     </nav>
 
     {{-- CONTENIDO --}}
     <main class="container py-4">
-        {{-- Mensajes de error o éxito --}}
+        {{-- Alertas --}}
         @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="alert-cine alert-cine-error d-flex align-items-center gap-2 mb-4 animate-slide-down" role="alert">
+                <i class="bi bi-exclamation-triangle-fill text-cine-primary"></i>
+                <span>{{ session('error') }}</span>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Cerrar"
+                        style="filter:invert(1);opacity:0.5;"></button>
             </div>
         @endif
 
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="alert-cine alert-cine-success d-flex align-items-center gap-2 mb-4 animate-slide-down" role="alert">
+                <i class="bi bi-check-circle-fill text-cine-success"></i>
+                <span>{{ session('success') }}</span>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Cerrar"
+                        style="filter:invert(1);opacity:0.5;"></button>
             </div>
         @endif
 
@@ -119,8 +103,11 @@
     </main>
 
     {{-- FOOTER --}}
-    <footer class="footer-cine text-center py-3 mt-5">
-        <p class="mb-0">🎬 CineApp &copy; {{ date('Y') }} - Todos los derechos reservados</p>
+    <footer class="footer-cine text-center">
+        <p class="mb-0">
+            <span class="footer-brand">🎬 CINEAPP</span>
+            <span class="ms-2">&copy; {{ date('Y') }} — Todos los derechos reservados</span>
+        </p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
