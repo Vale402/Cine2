@@ -47,12 +47,13 @@ return [
 'mysql' => [
     'read' => [
         'host' => [
-            //'25.38.183.140', 
-            '127.0.0.1',  // Esclavo (temporalmente maestro mientras compañera no está)
+            '25.38.183.140', 
+            //'127.0.0.1',  // Esclavo (temporalmente maestro mientras compañera no está)
         ],
     ],
     'write' => [
         'host' => [
+            //'25.38.183.140',
             '25.0.239.52',    // Maestro (tu laptop)
         ],
     ],
